@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2bb14bca-5322-4323-ac51-5b21901f8195" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,12 +19,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="10" />
-    <option name="y" value="23" />
-    <option name="width" value="1260" />
-    <option name="height" value="729" />
   </component>
   <component name="ProjectId" id="1eIKajYY5YaD9Jcg7yfckz6F0WJ" />
   <component name="ProjectViewState">
@@ -52,7 +45,7 @@
       <updated>1594002867710</updated>
       <workItem from="1594002872256" duration="498000" />
       <workItem from="1594003387278" duration="149000" />
-      <workItem from="1594003738030" duration="414000" />
+      <workItem from="1594003738030" duration="834000" />
     </task>
     <servers />
   </component>
