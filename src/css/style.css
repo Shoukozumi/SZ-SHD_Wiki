@@ -76,5 +76,9 @@
     display: none;
 }
 
+area {
+    z-index: 200;
+}
+
 
 
