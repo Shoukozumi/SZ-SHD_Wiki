@@ -3,13 +3,15 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
         e.preventDefault();
         $(".floatingTree.trunk").fadeIn();
         $(".floatingBranch").hide();
-        $("map").imageMapResize();
+        $("map[name='trunk-map']").imageMapResize();
+        isTreeOn = true;
     });
 
     $("area[alt='Close']").click(function (e) {
         e.preventDefault();
         $(".floatingTree.trunk").fadeOut();
         $(".floatingBranch").fadeIn();
+        isTreeOn = false;
     }).hover(function () {
         showBranch("none");
         $(".closeMenu").fadeIn("fast");
@@ -52,28 +54,34 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
 
     var currentBranch = "none";
 
-    const subBranchMapArea = {'aboutus':'<area class="subBranchMap" alt="The Team" title="The Team" href="https://www.google.com" coords="1955,1581,1985,1501,2091,1425,2121,1388,2274,1360,2334,1375,2358,1417,2341,1447,2311,1509,2208,1477,2017,1573" shape="poly"> <area class="subBranchMap" alt="Collaboration" title="Collaboration" href="" coords="1992,1605,2099,1623,2148,1667,2260,1687,2319,1722,2381,1694,2435,1697,2465,1670,2524,1642,2532,1603,2269,1568,2123,1558,2062,1566" shape="poly"> <area class="subBranchMap" alt="Special thanks" title="Special thanks" href="" coords="1982,1613,2067,1645,2074,1680,2121,1707,2190,1722,2237,1741,2304,1769,2391,1813,2475,1848,2551,1892,2539,1944,2522,1994,2467,2008,2373,1910,2272,1939,2232,1867,2146,1813,2089,1820,2057,1749,1987,1717" shape="poly">'};
-
+    var isResetList = {};
 
     function showBranch(branchID) {
-
+        if(!isTreeOn)
+            return;
         if (branchID != currentBranch){
             $("img#"+branchID).fadeIn("fast");
             $("img#"+currentBranch).fadeOut("fast");
             currentBranch = branchID;
+            if (typeof isResetList["map[name='" + branchID + "-map']"] == "undefined"){
+
+                $("map[name='" + branchID + "-map']").imageMapResize();
+                isResetList["map[name='" + branchID + "-map']"] = false;
+            }
+
+
             var trunkmap = $("map[name='trunk-map']");
             trunkmap.find("area.subBranchMap").remove();
-            trunkmap.prepend($("map[name='aboutus-map']").find("area"));
+            trunkmap.prepend($("map[name='" + branchID + "-map']").find("area").clone());// you gotta make a clone of it
 
-            resizer.resizeMap();
             // $("area.subBranchMap").remove();
             // $("map[name='trunk-map']").prepend(subBranchMapArea["aboutus"]);
             // console.log(subBranchMapArea[branchID]);
             // $("map").imageMapResize();
         }
     }
-    var resizer = imageMapResize();
-    console.log(resizer);
+    // var resizer = imageMapResize();
+    // console.log(resizer);
 
     // var trunkmap = $("map[name='trunk-map']");
     // trunkmap.find("area.subBranchMap").remove();
@@ -81,12 +89,17 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
 
 });
 
+var isTreeOn = false;
+
+
 // Dynamic Map Resizer
 (function() {
     'use strict';
     function scaleImageMap() {
         function resizeMap() {
             function resizeAreaTag(cachedAreaCoords, idx) {
+                // console.log(cachedAreaCoords);
+                // console.log(idx);
                 function scale(coord) {
                     var dimension = 1 === (isWidth = 1 - isWidth) ? 'width' : 'height';
                     return (
@@ -96,7 +109,18 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
                 }
 
                 var isWidth = 0;
-                areas[idx].coords = cachedAreaCoords
+
+                var countOfBranch = 0;
+                if(map.name == "trunk-map"){
+                    // console.log("true map");
+                    for(var i = 0; i < areas.length; i++){
+                        if(areas[i].className == "subBranchMap"){
+                            countOfBranch++;
+                        }
+                    }
+                    // console.log(countOfBranch);
+                }
+                areas[idx+countOfBranch].coords = cachedAreaCoords
                     .split(',')
                     .map(scale)
                     .join(',')
@@ -117,8 +141,11 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
                     10
                 ),
             };
-            setup(); //unsafe
+            // setup(); //unsafe
             // console.log(cachedAreaCoordsArray);
+            // console.log(cachedAreaCoordsArray);
+            // console.log(areas);
+
             cachedAreaCoordsArray.forEach(resizeAreaTag)
         }
 
@@ -170,6 +197,7 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
             cachedAreaCoordsArray = null,
             image = null,
             timer = null;
+        //console.log(map.name);
 
         if (!beenHere()) {
             setup();
@@ -211,6 +239,7 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
                         document.querySelectorAll(target || 'map'),
                         init
                     );
+
                     break;
                 case 'object':
                     init(target);
@@ -232,13 +261,50 @@ $(document).ready(function() { // this line is ultra fucking important, wasted 2
     }
 
     if ('jQuery' in window) {
-        window.jQuery.fn.imageMapResize = function $imageMapResizeF() {
+        window.jQuery.fn.imageMapResize = function $imageMapResizeF() { //window.jQuery.fn assigning this the imageMapResize function to all jQuery prototypes $('anything')
             return this.filter('map')
                 .each(scaleImageMap)
                 .end()
         }
     }
 })();
+
+// class ResponsiveImageMap {
+//     constructor(map, img, width) {
+//         this.img = img;
+//         this.originalWidth = width;
+//         this.areas = [];
+//
+//         map.getElementsByTagName('area').forEach(function (element) {
+//             var area = element;
+//             console.log(area);
+//             this.areas.push({
+//                 element: area,
+//                 originalCoords: area.coords.split(',')
+//             });
+//         });
+//
+//         window.addEventListener('resize', this.resize);
+//         this.resize();
+//     }
+//
+//     resize() {
+//         const ratio = this.img.offsetWidth / this.originalWidth;
+//         this.areas.forEach(function (area) {
+//             console.log("area" + area);
+//
+//             const newCoords = [];
+//
+//             area.originalCoords.forEach(function (element) {
+//                 console.log("coor" + element);
+//                 newCoords.push(Math.round(element * ratio));
+//             });
+//
+//             area.element.coords = newCoords.join(',');
+//         });
+//         return true;
+//     };
+// }
 
 /*
 *
