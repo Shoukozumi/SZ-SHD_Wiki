@@ -1,0 +1,45 @@
+.treeContainer{
+    width: 100%;
+    text-align: center;
+}
+
+.floatingBranch {
+    position: fixed;
+    background-image: url("../img/general/branch-small.png");
+    background-size: contain;
+    width:280px;
+    height:210px;
+    bottom:0;
+    -ms-transform: translate(-50%, 60px);
+    transform: translate(-50%, 60px);
+}
+
+.floatingBranch:hover {
+    background-image: url("../img/general/branch.png");
+    transform: translate(-50%, 40px);
+}
+
+.floatingTree {
+    transform: translate(-50%);
+    bottom:0;
+    position: fixed;
+    height: 100%;
+    width: auto;
+    display: none;
+}
+
+.floatingSubTree {
+    transform: translate(-50%);
+    bottom:0;
+    position: fixed;
+    height: 100%;
+    width: auto;
+    display: none;
+}
+
+area {
+    z-index: 200;
+}
+
+
+
